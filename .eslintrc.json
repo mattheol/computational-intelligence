@@ -1,0 +1,17 @@
+{
+    "extends": "vaadin",
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 2018,
+        "project": "./tsconfig.json"
+    },
+    "rules": {
+        "dot-notation":"error",
+        "no-unneeded-ternary":"error",
+        "@typescript-eslint/ban-types":"error",
+        "prefer-arrow-callback":"error",
+        "prefer-destructuring":"error",
+        "lines-between-class-members":"off",
+        "lit/no-template-arrow":"off"
+    }
+}
