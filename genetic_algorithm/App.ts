@@ -3,20 +3,28 @@ import {
     CROSS_PROPABILITY,
     MUTATE_PROPABILITY,
     NUMBER_OF_ITERATIONS,
-    SIZE_OF_CHROMOSOME,
     SIZE_OF_POPULATION,
 } from './constants';
-import { BCross1, KPFitnessFun, notNullAndNotUndefined, randomIntFromInterval } from './helpers';
+import {
+    BCross1,
+    DataProvider,
+    KPFitnessFun,
+    loadData,
+    notNullAndNotUndefined,
+    randomIntFromInterval,
+} from './helpers';
+import * as fs from 'fs';
 
+loadData();
 const fitnessFun = KPFitnessFun;
 const crossFun = BCross1;
-const bestIndividuals: Array<BIndividual> = [];
-const populationsAvg: Array<number> = [];
+const populationStats: Array<{ bestIndividual: BIndividual; avg: number }> = [];
+
 let population = Array.from(
     { length: SIZE_OF_POPULATION },
     () =>
         new BIndividual(
-            Array.from({ length: SIZE_OF_CHROMOSOME }, () =>
+            Array.from({ length: DataProvider.SIZE_OF_CHROMOSOME }, () =>
                 Math.random() < 0.5 ? 0 : 1,
             ) as Array<0 | 1>,
         ),
@@ -78,9 +86,12 @@ for (let i = 0; i < NUMBER_OF_ITERATIONS; i++) {
             };
         })
         .filter(notNullAndNotUndefined);
-    populationsAvg.push(fitnessSum / population.length);
-    bestIndividuals.push(bestIndividual);
+
+    populationStats.push({ bestIndividual, avg: fitnessSum / population.length });
 }
 
-console.log(bestIndividuals.map((individual) => fitnessFun(individual)));
-console.log(populationsAvg.map((nr) => nr));
+const textToWrite = populationStats
+    .map(({ bestIndividual, avg }) => `${fitnessFun(bestIndividual)}\t${avg}`)
+    .join('\n');
+
+fs.writeFileSync('./output/file.txt', textToWrite);
