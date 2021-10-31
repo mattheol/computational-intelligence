@@ -1,97 +1,51 @@
+import { GeneticAlgorithm } from './Algorithm';
 import { BIndividual } from './BIndividual';
-import {
-    CROSS_PROPABILITY,
-    MUTATE_PROPABILITY,
-    NUMBER_OF_ITERATIONS,
-    SIZE_OF_POPULATION,
-} from './constants';
-import {
-    BCross1,
-    DataProvider,
-    KPFitnessFun,
-    loadData,
-    notNullAndNotUndefined,
-    randomIntFromInterval,
-} from './helpers';
-import * as fs from 'fs';
+import { BCrossover1, KPFitnessFun, loadData } from './helpers';
 
 loadData();
-const fitnessFun = KPFitnessFun;
-const crossFun = BCross1;
-const populationStats: Array<{ bestIndividual: BIndividual; avg: number }> = [];
 
-let population = Array.from(
-    { length: SIZE_OF_POPULATION },
-    () =>
-        new BIndividual(
-            Array.from({ length: DataProvider.SIZE_OF_CHROMOSOME }, () =>
-                Math.random() < 0.5 ? 0 : 1,
-            ) as Array<0 | 1>,
-        ),
-);
+// const MUTATE_PROPABILITES = [0, 0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3];
 
-let fitnessSum = 0;
-let rouletteEntries: Array<{ fitness: number; min: number; max: number; index: number }> = [];
-for (let i = 0; i < NUMBER_OF_ITERATIONS; i++) {
-    if (i !== 0) {
-        const newPopulation: BIndividual[] = [];
-        while (newPopulation.length < population.length) {
-            const rouletteRandom1 = randomIntFromInterval(0, fitnessSum);
-            const rouletteRandom2 = randomIntFromInterval(0, fitnessSum);
-            const parent1 =
-                population[
-                    rouletteEntries.find(
-                        (entry) => entry.min <= rouletteRandom1 && rouletteRandom1 <= entry.max,
-                    )!.index
-                ];
-            const parent2 =
-                population[
-                    rouletteEntries.find(
-                        (entry) => entry.min <= rouletteRandom2 && rouletteRandom2 <= entry.max,
-                    )!.index
-                ];
-            const crossRandom = Math.random();
-            if (crossRandom <= CROSS_PROPABILITY) {
-                newPopulation.push(...crossFun(parent1, parent2));
-            }
-        }
-        newPopulation.forEach((individual) => {
-            const mutateRandom = Math.random();
-            if (mutateRandom <= MUTATE_PROPABILITY) {
-                individual.mutate();
-            }
-        });
-        population = newPopulation;
+// MUTATE_PROPABILITES.forEach((mutatePropability) => {
+//     const bestIndividuals: Array<BIndividual> = [];
+//     for (let i = 0; i < 1000; i++) {
+//         const res = GeneticAlgorithm(KPFitnessFun, BCrossover1, { mutatePropability });
+//         const bestIndividual = res.reduce((prev, current) =>
+//             KPFitnessFun(prev.bestIndividual) > KPFitnessFun(current.bestIndividual)
+//                 ? prev
+//                 : current,
+//         ).bestIndividual;
+//         bestIndividuals.push(bestIndividual);
+//     }
+//     const sum = bestIndividuals.reduce((sum, curr) => (sum += KPFitnessFun(curr)), 0);
+//     console.log(
+//         mutatePropability.toLocaleString() + ' ' + (sum / bestIndividuals.length).toLocaleString(),
+//     );
+// });
+
+const CROSSOVER_PROPABILITIES = [0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1];
+
+CROSSOVER_PROPABILITIES.forEach((crossoverPropability) => {
+    const bestIndividuals: Array<BIndividual> = [];
+    for (let i = 0; i < 1000; i++) {
+        const res = GeneticAlgorithm(KPFitnessFun, BCrossover1, { crossoverPropability });
+        const bestIndividual = res.reduce((prev, current) =>
+            KPFitnessFun(prev.bestIndividual) > KPFitnessFun(current.bestIndividual)
+                ? prev
+                : current,
+        ).bestIndividual;
+        bestIndividuals.push(bestIndividual);
     }
+    const sum = bestIndividuals.reduce((sum, curr) => (sum += KPFitnessFun(curr)), 0);
+    console.log(
+        crossoverPropability.toLocaleString() +
+            ' ' +
+            (sum / bestIndividuals.length).toLocaleString(),
+    );
+});
 
-    let maxFitness = 0;
-    let bestIndividual = population[0];
-    fitnessSum = 0;
-    rouletteEntries = population
-        .map((individual, i) => {
-            const fitness = fitnessFun(individual);
-            if (!fitness) return undefined;
-            if (fitness > maxFitness) {
-                maxFitness = fitness;
-                bestIndividual = individual;
-            }
-            const min = fitnessSum;
-            fitnessSum += fitness;
-            const max = fitnessSum;
-            return {
-                fitness,
-                min,
-                max,
-                index: i,
-            };
-        })
-        .filter(notNullAndNotUndefined);
+// const textToWrite = populationStats
+//     .map(({ bestIndividual, avg }) => `${fitnessFun(bestIndividual)}\t${avg}`)
+//     .join('\n');
 
-    populationStats.push({ bestIndividual, avg: fitnessSum / population.length });
-}
-
-const textToWrite = populationStats
-    .map(({ bestIndividual, avg }) => `${fitnessFun(bestIndividual)}\t${avg}`)
-    .join('\n');
-
-fs.writeFileSync('./output/file.txt', textToWrite);
+// fs.writeFileSync('./output/file.txt', textToWrite);

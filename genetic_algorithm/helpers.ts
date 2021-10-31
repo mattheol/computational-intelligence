@@ -24,7 +24,7 @@ export function KPFitnessFun(individual: BIndividual) {
     return totalWeight <= DataProvider.CAPACITY ? fitness : 0;
 }
 
-export function BCross1(parent1: BIndividual, parent2: BIndividual): Array<BIndividual> {
+export function BCrossover1(parent1: BIndividual, parent2: BIndividual): Array<BIndividual> {
     const splitPoint = randomIntFromInterval(1, DataProvider.SIZE_OF_CHROMOSOME - 1);
     return [
         new BIndividual([
@@ -39,12 +39,12 @@ export function BCross1(parent1: BIndividual, parent2: BIndividual): Array<BIndi
 }
 
 export function loadData() {
-    const result = fs.readFileSync('./data/dataset3.txt').toString();
+    const result = fs.readFileSync('./data/dataset.txt').toString();
     const data = result.split('\n').map((line) => line.split(' '));
     DataProvider.SIZE_OF_CHROMOSOME = +data[0][0];
     DataProvider.CAPACITY = +data[0][1];
-    DataProvider.WEIGHTS = data.slice(1).map((lineData) => +lineData[0]);
-    DataProvider.PROFITS = data.slice(1).map((lineData) => +lineData[1]);
+    DataProvider.WEIGHTS = data.slice(1).map((lineData) => +lineData[1]);
+    DataProvider.PROFITS = data.slice(1).map((lineData) => +lineData[0]);
 }
 
 export class DataProvider {

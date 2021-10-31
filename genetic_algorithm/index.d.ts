@@ -1,4 +1,4 @@
 export interface Individual {
     chromosome: any;
-    mutate(): void;
+    mutate(position: number): void;
 }
