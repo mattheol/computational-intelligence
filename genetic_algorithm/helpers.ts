@@ -38,6 +38,41 @@ export function BCrossover1(parent1: BIndividual, parent2: BIndividual): Array<B
     ];
 }
 
+export function BCrossover2(parent1: BIndividual, parent2: BIndividual): Array<BIndividual> {
+    const splitPoint1 = randomIntFromInterval(1, DataProvider.SIZE_OF_CHROMOSOME - 1);
+    let splitPoint2 = randomIntFromInterval(1, DataProvider.SIZE_OF_CHROMOSOME - 1);
+    while (splitPoint2 == splitPoint1) {
+        splitPoint2 = randomIntFromInterval(1, DataProvider.SIZE_OF_CHROMOSOME - 1);
+    }
+    if (splitPoint1 < splitPoint2) {
+        return [
+            new BIndividual([
+                ...parent1.chromosome.slice(0, splitPoint1),
+                ...parent2.chromosome.slice(splitPoint1, splitPoint2),
+                ...parent1.chromosome.slice(splitPoint2, DataProvider.SIZE_OF_CHROMOSOME),
+            ]),
+            new BIndividual([
+                ...parent2.chromosome.slice(0, splitPoint1),
+                ...parent1.chromosome.slice(splitPoint1, splitPoint2),
+                ...parent2.chromosome.slice(splitPoint2, DataProvider.SIZE_OF_CHROMOSOME),
+            ]),
+        ];
+    } else {
+        return [
+            new BIndividual([
+                ...parent1.chromosome.slice(0, splitPoint2),
+                ...parent2.chromosome.slice(splitPoint2, splitPoint1),
+                ...parent1.chromosome.slice(splitPoint1, DataProvider.SIZE_OF_CHROMOSOME),
+            ]),
+            new BIndividual([
+                ...parent2.chromosome.slice(0, splitPoint2),
+                ...parent1.chromosome.slice(splitPoint2, splitPoint1),
+                ...parent2.chromosome.slice(splitPoint1, DataProvider.SIZE_OF_CHROMOSOME),
+            ]),
+        ];
+    }
+}
+
 export function loadData() {
     const result = fs.readFileSync('./data/dataset.txt').toString();
     const data = result.split('\n').map((line) => line.split(' '));
