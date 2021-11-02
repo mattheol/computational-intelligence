@@ -89,24 +89,24 @@ loadData();
 //     console.log(params.selectionType + ' ' + (sum / bestIndividuals.length).toLocaleString());
 // });
 
-const CROSSOVER_FUNCTIONS: Array<
-    (parent1: BIndividual, parent2: BIndividual) => Array<BIndividual>
-> = [BCrossover1, BCrossover2, BUniformCrossover];
+// const CROSSOVER_FUNCTIONS: Array<
+//     (parent1: BIndividual, parent2: BIndividual) => Array<BIndividual>
+// > = [BCrossover1, BCrossover2, BUniformCrossover];
 
-CROSSOVER_FUNCTIONS.forEach((crossoverFun) => {
-    const bestIndividuals: Array<BIndividual> = [];
-    for (let i = 0; i < 1000; i++) {
-        const res = GeneticAlgorithm(KPFitnessFun, crossoverFun);
-        const bestIndividual = res.reduce((prev, current) =>
-            KPFitnessFun(prev.bestIndividual) > KPFitnessFun(current.bestIndividual)
-                ? prev
-                : current,
-        ).bestIndividual;
-        bestIndividuals.push(bestIndividual);
-    }
-    const sum = bestIndividuals.reduce((sum, curr) => (sum += KPFitnessFun(curr)), 0);
-    console.log(crossoverFun.name + ' ' + (sum / bestIndividuals.length).toLocaleString());
-});
+// CROSSOVER_FUNCTIONS.forEach((crossoverFun) => {
+//     const bestIndividuals: Array<BIndividual> = [];
+//     for (let i = 0; i < 1000; i++) {
+//         const res = GeneticAlgorithm(KPFitnessFun, crossoverFun);
+//         const bestIndividual = res.reduce((prev, current) =>
+//             KPFitnessFun(prev.bestIndividual) > KPFitnessFun(current.bestIndividual)
+//                 ? prev
+//                 : current,
+//         ).bestIndividual;
+//         bestIndividuals.push(bestIndividual);
+//     }
+//     const sum = bestIndividuals.reduce((sum, curr) => (sum += KPFitnessFun(curr)), 0);
+//     console.log(crossoverFun.name + ' ' + (sum / bestIndividuals.length).toLocaleString());
+// });
 
 // const CROSSOVER_PROPABILITES_2 = [0, 0.01, 0.3];
 
@@ -144,6 +144,76 @@ CROSSOVER_FUNCTIONS.forEach((crossoverFun) => {
 //             KPFitnessFun(crossoverResults[index][i].bestIndividual).toLocaleString() +
 //             ' ' +
 //             crossoverResults[index][i].avg.toLocaleString();
+//     });
+//     console.log(line);
+// }
+
+// const bestIndividuals1: Array<BIndividual> = [];
+// const bestIndividuals2: Array<BIndividual> = [];
+
+// for (let i = 0; i < 1000; i++) {
+//     const res1 = GeneticAlgorithm(KPFitnessFun, BCrossover1);
+//     const res2 = GeneticAlgorithm(KPFitnessFun, BCrossover1, { mutateProbabilityForWeak: 0.1 });
+
+//     bestIndividuals1.push(
+//         res1.reduce((prev, current) =>
+//             KPFitnessFun(prev.bestIndividual) > KPFitnessFun(current.bestIndividual)
+//                 ? prev
+//                 : current,
+//         ).bestIndividual,
+//     );
+
+//     bestIndividuals2.push(
+//         res2.reduce((prev, current) =>
+//             KPFitnessFun(prev.bestIndividual) > KPFitnessFun(current.bestIndividual)
+//                 ? prev
+//                 : current,
+//         ).bestIndividual,
+//     );
+// }
+
+// const avg1 = bestIndividuals1.reduce((sum, curr) => (sum += KPFitnessFun(curr)), 0) / 1000;
+// const avg2 = bestIndividuals2.reduce((sum, curr) => (sum += KPFitnessFun(curr)), 0) / 1000;
+// console.log(avg1);
+// console.log(avg2);
+
+// const bestIndividuals: Array<BIndividual> = [];
+
+// for (let i = 0; i < 1000; i++) {
+//     const res = GeneticAlgorithm(KPFitnessFun, BUniformCrossover, {
+//         mutateProbabilityForWeak: 0.1,
+//         mutatePropability: 0.01,
+//         crossoverPropability: 0.95,
+//         selectionType: 'rank',
+//     });
+//     bestIndividuals.push(
+//         res.reduce((prev, current) =>
+//             KPFitnessFun(prev.bestIndividual) > KPFitnessFun(current.bestIndividual)
+//                 ? prev
+//                 : current,
+//         ).bestIndividual,
+//     );
+// }
+
+// const avg = bestIndividuals.reduce((sum, curr) => (sum += KPFitnessFun(curr)), 0) / 1000;
+// console.log(avg);
+
+// const POPULATION_SIZES = [20, 50, 100];
+// const sizeResults: Array<Array<{ bestIndividual: BIndividual; avg: number }>> = [];
+
+// POPULATION_SIZES.forEach((populationSize, i) => {
+//     sizeResults.push(
+//         GeneticAlgorithm(KPFitnessFun, BCrossover1, {
+//             sizeOfPopulation: populationSize,
+//             numberOfIterations: 150,
+//         }),
+//     );
+// });
+
+// for (let i = 0; i < sizeResults[0].length; i++) {
+//     let line = i + 1 + '';
+//     POPULATION_SIZES.forEach((_, index) => {
+//         line += ' ' + KPFitnessFun(sizeResults[index][i].bestIndividual).toLocaleString();
 //     });
 //     console.log(line);
 // }

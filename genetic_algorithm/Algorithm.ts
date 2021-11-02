@@ -16,6 +16,7 @@ export function GeneticAlgorithm(
     params?: {
         crossoverPropability?: number;
         mutatePropability?: number;
+        mutateProbabilityForWeak?: number;
         sizeOfPopulation?: number;
         numberOfIterations?: number;
         selectionType?: SelectionType;
@@ -23,7 +24,7 @@ export function GeneticAlgorithm(
     },
 ) {
     const crossoverPropability = params?.crossoverPropability ?? DEFAULT_CROSSOVER_PROPABILITY;
-    const mutatePropablitiy = params?.mutatePropability ?? DEFAULT_MUTATE_PROPABILITY;
+    const mutateProbability = params?.mutatePropability ?? DEFAULT_MUTATE_PROPABILITY;
     const sizeOfPopulation = params?.sizeOfPopulation || DEFAULT_SIZE_OF_POPULATION;
     const numberOfIterations = params?.numberOfIterations || DEFAULT_NUMBER_OF_ITERATIONS;
     const selectionType = params?.selectionType || DEFAULT_SELECTION_TYPE;
@@ -104,14 +105,33 @@ export function GeneticAlgorithm(
                     );
                 }
             }
-            newPopulation.forEach((individual) =>
-                individual.chromosome.forEach((_, i) => {
-                    const mutateRandom = Math.random();
-                    if (mutateRandom <= mutatePropablitiy) {
-                        individual.mutate(i);
-                    }
-                }),
-            );
+            if (params?.mutateProbabilityForWeak != undefined) {
+                const avg =
+                    newPopulation.reduce((prev, curr) => (prev += fitnessFun(curr)), 0) /
+                    newPopulation.length;
+                newPopulation.forEach((individual) => {
+                    const isWeak = fitnessFun(individual) < avg;
+                    const mProbability = isWeak
+                        ? params.mutateProbabilityForWeak!
+                        : mutateProbability;
+                    individual.chromosome.forEach((_, i) => {
+                        const mutateRandom = Math.random();
+                        if (mutateRandom <= mProbability) {
+                            individual.mutate(i);
+                        }
+                    });
+                });
+            } else {
+                newPopulation.forEach((individual) =>
+                    individual.chromosome.forEach((_, i) => {
+                        const mutateRandom = Math.random();
+                        if (mutateRandom <= mutateProbability) {
+                            individual.mutate(i);
+                        }
+                    }),
+                );
+            }
+
             population = newPopulation;
         }
 
