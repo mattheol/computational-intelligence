@@ -22,7 +22,7 @@ export function GeneticAlgorithm(
         tournamentSize?: number;
     },
 ) {
-    const crossoverPropability = params?.crossoverPropability || DEFAULT_CROSSOVER_PROPABILITY;
+    const crossoverPropability = params?.crossoverPropability ?? DEFAULT_CROSSOVER_PROPABILITY;
     const mutatePropablitiy = params?.mutatePropability ?? DEFAULT_MUTATE_PROPABILITY;
     const sizeOfPopulation = params?.sizeOfPopulation || DEFAULT_SIZE_OF_POPULATION;
     const numberOfIterations = params?.numberOfIterations || DEFAULT_NUMBER_OF_ITERATIONS;
