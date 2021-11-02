@@ -1,7 +1,7 @@
 import { SelectionType } from '.';
 import { GeneticAlgorithm } from './Algorithm';
 import { BIndividual } from './BIndividual';
-import { BCrossover1, BCrossover2, KPFitnessFun, loadData } from './helpers';
+import { BCrossover1, BCrossover2, BUniformCrossover, KPFitnessFun, loadData } from './helpers';
 
 loadData();
 
@@ -89,24 +89,24 @@ loadData();
 //     console.log(params.selectionType + ' ' + (sum / bestIndividuals.length).toLocaleString());
 // });
 
-// const CROSSOVER_FUNCTIONS: Array<
-//     (parent1: BIndividual, parent2: BIndividual) => Array<BIndividual>
-// > = [BCrossover1, BCrossover2];
+const CROSSOVER_FUNCTIONS: Array<
+    (parent1: BIndividual, parent2: BIndividual) => Array<BIndividual>
+> = [BCrossover1, BCrossover2, BUniformCrossover];
 
-// CROSSOVER_FUNCTIONS.forEach((crossoverFun) => {
-//     const bestIndividuals: Array<BIndividual> = [];
-//     for (let i = 0; i < 1000; i++) {
-//         const res = GeneticAlgorithm(KPFitnessFun, crossoverFun);
-//         const bestIndividual = res.reduce((prev, current) =>
-//             KPFitnessFun(prev.bestIndividual) > KPFitnessFun(current.bestIndividual)
-//                 ? prev
-//                 : current,
-//         ).bestIndividual;
-//         bestIndividuals.push(bestIndividual);
-//     }
-//     const sum = bestIndividuals.reduce((sum, curr) => (sum += KPFitnessFun(curr)), 0);
-//     console.log(crossoverFun.name + ' ' + (sum / bestIndividuals.length).toLocaleString());
-// });
+CROSSOVER_FUNCTIONS.forEach((crossoverFun) => {
+    const bestIndividuals: Array<BIndividual> = [];
+    for (let i = 0; i < 1000; i++) {
+        const res = GeneticAlgorithm(KPFitnessFun, crossoverFun);
+        const bestIndividual = res.reduce((prev, current) =>
+            KPFitnessFun(prev.bestIndividual) > KPFitnessFun(current.bestIndividual)
+                ? prev
+                : current,
+        ).bestIndividual;
+        bestIndividuals.push(bestIndividual);
+    }
+    const sum = bestIndividuals.reduce((sum, curr) => (sum += KPFitnessFun(curr)), 0);
+    console.log(crossoverFun.name + ' ' + (sum / bestIndividuals.length).toLocaleString());
+});
 
 // const CROSSOVER_PROPABILITES_2 = [0, 0.01, 0.3];
 
@@ -128,22 +128,22 @@ loadData();
 //     console.log(line);
 // }
 
-const CROSSOVER_PROPABILITES_2 = [0.5, 1];
+// const CROSSOVER_PROPABILITES_2 = [0.5, 1];
 
-const crossoverResults: Array<Array<{ bestIndividual: BIndividual; avg: number }>> = [];
+// const crossoverResults: Array<Array<{ bestIndividual: BIndividual; avg: number }>> = [];
 
-CROSSOVER_PROPABILITES_2.forEach((crossoverPropability, i) => {
-    crossoverResults.push(GeneticAlgorithm(KPFitnessFun, BCrossover1, { crossoverPropability }));
-});
+// CROSSOVER_PROPABILITES_2.forEach((crossoverPropability, i) => {
+//     crossoverResults.push(GeneticAlgorithm(KPFitnessFun, BCrossover1, { crossoverPropability }));
+// });
 
-for (let i = 0; i < crossoverResults[0].length; i++) {
-    let line = i + 1 + '';
-    CROSSOVER_PROPABILITES_2.forEach((_, index) => {
-        line +=
-            ' ' +
-            KPFitnessFun(crossoverResults[index][i].bestIndividual).toLocaleString() +
-            ' ' +
-            crossoverResults[index][i].avg.toLocaleString();
-    });
-    console.log(line);
-}
+// for (let i = 0; i < crossoverResults[0].length; i++) {
+//     let line = i + 1 + '';
+//     CROSSOVER_PROPABILITES_2.forEach((_, index) => {
+//         line +=
+//             ' ' +
+//             KPFitnessFun(crossoverResults[index][i].bestIndividual).toLocaleString() +
+//             ' ' +
+//             crossoverResults[index][i].avg.toLocaleString();
+//     });
+//     console.log(line);
+// }

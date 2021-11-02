@@ -73,6 +73,25 @@ export function BCrossover2(parent1: BIndividual, parent2: BIndividual): Array<B
     }
 }
 
+export function BUniformCrossover(parent1: BIndividual, parent2: BIndividual): Array<BIndividual> {
+    const mask = Array.from({ length: DataProvider.SIZE_OF_CHROMOSOME }, () =>
+        Math.random() <= 0.5 ? 0 : 1,
+    ) as Array<0 | 1>;
+
+    const chromosome1 = [] as Array<0 | 1>;
+    const chromosome2 = [] as Array<0 | 1>;
+    mask.forEach((bit, i) => {
+        if (bit === 0) {
+            chromosome1.push(parent1.chromosome[i]);
+            chromosome2.push(parent2.chromosome[i]);
+        } else {
+            chromosome1.push(parent2.chromosome[i]);
+            chromosome2.push(parent1.chromosome[i]);
+        }
+    });
+    return [new BIndividual(chromosome1), new BIndividual(chromosome2)];
+}
+
 export function loadData() {
     const result = fs.readFileSync('./data/dataset.txt').toString();
     const data = result.split('\n').map((line) => line.split(' '));
