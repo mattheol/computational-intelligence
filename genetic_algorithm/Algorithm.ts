@@ -36,7 +36,7 @@ export function GeneticAlgorithm(
         { length: sizeOfPopulation },
         () =>
             new BIndividual(
-                Array.from({ length: DataProvider.SIZE_OF_CHROMOSOME }, () =>
+                Array.from({ length: DataProvider.NUMBER_OF_ITEMS }, () =>
                     Math.random() <= 0.5 ? 0 : 1,
                 ) as Array<0 | 1>,
             ),

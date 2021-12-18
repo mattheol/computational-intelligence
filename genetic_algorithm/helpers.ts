@@ -25,36 +25,36 @@ export function KPFitnessFun(individual: BIndividual) {
 }
 
 export function BCrossover1(parent1: BIndividual, parent2: BIndividual): Array<BIndividual> {
-    const splitPoint = randomIntFromInterval(1, DataProvider.SIZE_OF_CHROMOSOME - 1);
+    const splitPoint = randomIntFromInterval(1, DataProvider.NUMBER_OF_ITEMS - 1);
     return [
         new BIndividual([
             ...parent1.chromosome.slice(0, splitPoint),
-            ...parent2.chromosome.slice(splitPoint, DataProvider.SIZE_OF_CHROMOSOME),
+            ...parent2.chromosome.slice(splitPoint, DataProvider.NUMBER_OF_ITEMS),
         ]),
         new BIndividual([
             ...parent2.chromosome.slice(0, splitPoint),
-            ...parent1.chromosome.slice(splitPoint, DataProvider.SIZE_OF_CHROMOSOME),
+            ...parent1.chromosome.slice(splitPoint, DataProvider.NUMBER_OF_ITEMS),
         ]),
     ];
 }
 
 export function BCrossover2(parent1: BIndividual, parent2: BIndividual): Array<BIndividual> {
-    const splitPoint1 = randomIntFromInterval(1, DataProvider.SIZE_OF_CHROMOSOME - 1);
-    let splitPoint2 = randomIntFromInterval(1, DataProvider.SIZE_OF_CHROMOSOME - 1);
+    const splitPoint1 = randomIntFromInterval(1, DataProvider.NUMBER_OF_ITEMS - 1);
+    let splitPoint2 = randomIntFromInterval(1, DataProvider.NUMBER_OF_ITEMS - 1);
     while (splitPoint2 == splitPoint1) {
-        splitPoint2 = randomIntFromInterval(1, DataProvider.SIZE_OF_CHROMOSOME - 1);
+        splitPoint2 = randomIntFromInterval(1, DataProvider.NUMBER_OF_ITEMS - 1);
     }
     if (splitPoint1 < splitPoint2) {
         return [
             new BIndividual([
                 ...parent1.chromosome.slice(0, splitPoint1),
                 ...parent2.chromosome.slice(splitPoint1, splitPoint2),
-                ...parent1.chromosome.slice(splitPoint2, DataProvider.SIZE_OF_CHROMOSOME),
+                ...parent1.chromosome.slice(splitPoint2, DataProvider.NUMBER_OF_ITEMS),
             ]),
             new BIndividual([
                 ...parent2.chromosome.slice(0, splitPoint1),
                 ...parent1.chromosome.slice(splitPoint1, splitPoint2),
-                ...parent2.chromosome.slice(splitPoint2, DataProvider.SIZE_OF_CHROMOSOME),
+                ...parent2.chromosome.slice(splitPoint2, DataProvider.NUMBER_OF_ITEMS),
             ]),
         ];
     } else {
@@ -62,19 +62,19 @@ export function BCrossover2(parent1: BIndividual, parent2: BIndividual): Array<B
             new BIndividual([
                 ...parent1.chromosome.slice(0, splitPoint2),
                 ...parent2.chromosome.slice(splitPoint2, splitPoint1),
-                ...parent1.chromosome.slice(splitPoint1, DataProvider.SIZE_OF_CHROMOSOME),
+                ...parent1.chromosome.slice(splitPoint1, DataProvider.NUMBER_OF_ITEMS),
             ]),
             new BIndividual([
                 ...parent2.chromosome.slice(0, splitPoint2),
                 ...parent1.chromosome.slice(splitPoint2, splitPoint1),
-                ...parent2.chromosome.slice(splitPoint1, DataProvider.SIZE_OF_CHROMOSOME),
+                ...parent2.chromosome.slice(splitPoint1, DataProvider.NUMBER_OF_ITEMS),
             ]),
         ];
     }
 }
 
 export function BUniformCrossover(parent1: BIndividual, parent2: BIndividual): Array<BIndividual> {
-    const mask = Array.from({ length: DataProvider.SIZE_OF_CHROMOSOME }, () =>
+    const mask = Array.from({ length: DataProvider.NUMBER_OF_ITEMS }, () =>
         Math.random() <= 0.5 ? 0 : 1,
     ) as Array<0 | 1>;
 
@@ -93,16 +93,16 @@ export function BUniformCrossover(parent1: BIndividual, parent2: BIndividual): A
 }
 
 export function loadData() {
-    const result = fs.readFileSync('./data/dataset.txt').toString();
+    const result = fs.readFileSync(__dirname + '/data/dataset.txt').toString();
     const data = result.split('\n').map((line) => line.split(' '));
-    DataProvider.SIZE_OF_CHROMOSOME = +data[0][0];
+    DataProvider.NUMBER_OF_ITEMS = +data[0][0];
     DataProvider.CAPACITY = +data[0][1];
     DataProvider.WEIGHTS = data.slice(1).map((lineData) => +lineData[1]);
     DataProvider.PROFITS = data.slice(1).map((lineData) => +lineData[0]);
 }
 
 export class DataProvider {
-    static SIZE_OF_CHROMOSOME: number;
+    static NUMBER_OF_ITEMS: number;
     static CAPACITY: number;
     static PROFITS: Array<number>;
     static WEIGHTS: Array<number>;
