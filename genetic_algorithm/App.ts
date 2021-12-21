@@ -177,27 +177,25 @@ loadData();
 // console.log(avg1);
 // console.log(avg2);
 
-const bestIndividuals: Array<BIndividual> = [];
+// const bestIndividuals: Array<BIndividual> = [];
+// for (let i = 0; i < 100; i++) {
+//     const res = GeneticAlgorithm(KPFitnessFun, BUniformCrossover, {
+//         mutateProbabilityForWeak: 0.1,
+//         mutatePropability: 0.01,
+//         crossoverPropability: 0.95,
+//         selectionType: 'rank',
+//     });
+//     bestIndividuals.push(
+//         res.reduce((prev, current) =>
+//             KPFitnessFun(prev.bestIndividual) > KPFitnessFun(current.bestIndividual)
+//                 ? prev
+//                 : current,
+//         ).bestIndividual,
+//     );
+// }
 
-for (let i = 0; i < 1000; i++) {
-    const res = GeneticAlgorithm(KPFitnessFun, BUniformCrossover, {
-        mutateProbabilityForWeak: 0.1,
-        mutatePropability: 0.01,
-        crossoverPropability: 0.95,
-        selectionType: 'rank',
-    });
-    bestIndividuals.push(
-        res.reduce((prev, current) =>
-            KPFitnessFun(prev.bestIndividual) > KPFitnessFun(current.bestIndividual)
-                ? prev
-                : current,
-        ).bestIndividual,
-    );
-}
-
-const avg = bestIndividuals.reduce((sum, curr) => (sum += KPFitnessFun(curr)), 0) / 1000;
-console.log(avg);
-
+// const avg = bestIndividuals.reduce((sum, curr) => (sum += KPFitnessFun(curr)), 0) / 100;
+// console.log(avg);
 // const POPULATION_SIZES = [20, 50, 100];
 // const sizeResults: Array<Array<{ bestIndividual: BIndividual; avg: number }>> = [];
 
@@ -217,3 +215,14 @@ console.log(avg);
 //     });
 //     console.log(line);
 // }
+
+const start = Date.now();
+const res = GeneticAlgorithm(KPFitnessFun, BUniformCrossover, {
+    mutateProbabilityForWeak: 0.1,
+    mutatePropability: 0.01,
+    crossoverPropability: 0.95,
+    selectionType: 'rank',
+});
+const end = Date.now();
+console.log(end - start);
+// res.forEach((r) => console.log(KPFitnessFun(r.bestIndividual) + ' ' + r.avg.toLocaleString()));

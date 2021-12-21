@@ -2,8 +2,8 @@ import { DataProvider } from '../genetic_algorithm/helpers';
 import { KPFitnessFun, Sigmoid } from './functions';
 
 export class Particle {
-    static maxVelocity = 4;
-    static minVelocity = -4;
+    static maxVelocity = 6;
+    static minVelocity = -6;
     public fitness = 0;
     public position: Array<0 | 1>;
     public velocity: number[];
@@ -23,16 +23,16 @@ export class Particle {
     }
 
     updateVelocity(bestGlobalSolution: Particle) {
-        const w = 0.8,
-            c1 = 2, //1-3
-            c2 = 2; //1-3
+        const w = 0.8, // <1
+            c_l = 2, //1-3
+            c_g = 3; //1-3
         this.velocity.forEach((vel, i) => {
             const r_l = Math.random();
             const r_g = Math.random();
             this.velocity[i] =
                 w * vel +
-                c1 * r_l * (this.bestLocalSolution.position[i] - this.position[i]) +
-                c2 * r_g * (bestGlobalSolution.position[i] - this.position[i]);
+                c_l * r_l * (this.bestLocalSolution.position[i] - this.position[i]) +
+                c_g * r_g * (bestGlobalSolution.position[i] - this.position[i]);
             if (this.velocity[i] > Particle.maxVelocity) {
                 this.velocity[i] = Particle.maxVelocity;
                 return;
