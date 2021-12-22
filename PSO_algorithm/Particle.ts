@@ -1,5 +1,5 @@
 import { DataProvider } from '../genetic_algorithm/helpers';
-import { KPFitnessFun, Sigmoid } from './functions';
+import { KPFitnessFun, randomNumberFromInterval, Sigmoid } from './functions';
 
 export class Particle {
     static maxVelocity = 6;
@@ -14,12 +14,16 @@ export class Particle {
         this.position = [];
         for (let i = 0; i < DataProvider.NUMBER_OF_ITEMS; i++) {
             this.position[i] = Math.random() <= 0.5 ? 0 : 1;
-            this.velocity[i] =
-                Particle.minVelocity +
-                Math.random() * (Particle.maxVelocity - Particle.minVelocity);
+            this.velocity[i] = randomNumberFromInterval(Particle.minVelocity, Particle.maxVelocity);
         }
         this.fitness = KPFitnessFun(this.position);
-        this.bestLocalSolution = JSON.parse(JSON.stringify(this));
+        this.bestLocalSolution = JSON.parse(
+            JSON.stringify({
+                fitness: this.fitness,
+                position: this.position,
+                velocity: this.velocity,
+            }),
+        );
     }
 
     updateVelocity(bestGlobalSolution: Particle) {
@@ -53,7 +57,13 @@ export class Particle {
         });
         this.fitness = KPFitnessFun(this.position);
         if (this.fitness > this.bestLocalSolution.fitness) {
-            this.bestLocalSolution = JSON.parse(JSON.stringify(this));
+            this.bestLocalSolution = JSON.parse(
+                JSON.stringify({
+                    fitness: this.fitness,
+                    position: this.position,
+                    velocity: this.velocity,
+                }),
+            );
         }
     }
 }

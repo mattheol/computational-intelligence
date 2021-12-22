@@ -17,3 +17,7 @@ export const KPFitnessFun = (solution: Array<0 | 1>) => {
     );
     return totalWeight <= DataProvider.CAPACITY ? fitness : 0;
 };
+
+export const randomNumberFromInterval = (min: number, max: number) => {
+    return Math.random() * (max - min) + min;
+};

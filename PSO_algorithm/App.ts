@@ -2,6 +2,8 @@ import { loadData } from '../genetic_algorithm/helpers';
 import { PSO } from './Algorithm';
 import { Particle } from './Particle';
 
+loadData();
+
 // const bestSolutions: Array<Particle> = [];
 // for (let i = 0; i < 1; i++) {
 //     const bestSolution = PSO({});
@@ -11,9 +13,11 @@ import { Particle } from './Particle';
 // console.log(avg.toLocaleString());
 
 // loadData();
+
 // const start = Date.now();
 // PSO({});
 // const end = Date.now();
 // console.log(end - start);
 
-PSO({});
+const res = PSO({});
+console.log(res);

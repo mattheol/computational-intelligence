@@ -26,7 +26,13 @@ export class Swarm {
             }
         });
         if (newBestSolution) {
-            this.bestGlobalSolution = JSON.parse(JSON.stringify(newBestSolution));
+            this.bestGlobalSolution = JSON.parse(
+                JSON.stringify({
+                    fitness: newBestSolution.fitness,
+                    position: newBestSolution.position,
+                    velocity: newBestSolution.velocity,
+                }),
+            );
         }
     }
 }
